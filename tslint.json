@@ -1,0 +1,10 @@
+{
+  // Refer to Link for rules
+  // https://palantir.github.io/tslint/rules/
+  // "extends": ["tslint"],
+  "rules": {
+    "quotemark": [true, "single", "avoid-escape", "avoid-template"],
+    "no-console": [false],
+    "ordered-imports": [false]
+  }
+}
