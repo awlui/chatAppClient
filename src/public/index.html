@@ -1,10 +1,117 @@
+
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>yo Webpack Typescript Generator yo</title>
-    </head>
-    <body>
-        Webpack Typescript Generator
-    </body>
+
+<head>
+    <title>Todo App</title>
+</head>
+
+<body>
+
+    <div>
+        <!-- <h2>Todos</h2>
+        <input type="text" id="text">
+        <input id="add" type="button" value="+ Add new">
+        <input id="add2" type="button" value="+ Add">
+        <input id="room" type="button" value="Add Room">
+        <input type="text" id="roomInput">
+        <ul id="showAll"></ul> -->
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+        <label for="password">Password:</label>
+        <input type="password" id="password">
+        <input type="submit" name="Submit" id="submit">
+
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="src.js"></script>
+    <script>
+    var options = {
+        connection: 'localhost:2000',
+        connectCB: connectCB,
+        collections: [
+          {
+            'name': 'todos',
+            'subscribers': {
+                'allTodos': renderAllTodos
+            },
+          }
+      ]
+    };
+
+    var dm = new DataManager(options);
+    $("#submit").click(() => {
+      dm.login($("#username").val(), );
+    })
+    // function connectCB() {
+    //     // console.log('connected');
+    // }
+
+    // function renderAllTodos(data) {
+    //     var html = '';
+    //     if (!data) return;
+    //     data.forEach(function(k) {
+    //         html += '<li>' + k.name + ' [<a href="javascript:" data-name="' + k.name + '" data-id="' + k.id + '" class="edit-todo">Edit</a>] [<a href="javascript:" data-id="' + k.id + '" class="remove-todo">Remove</a>]</li>';
+    //     });
+    //     $('#showAll').html(html);
+    //
+    //     // bind event listeners
+    //     $('.remove-todo').on('click', removeTodo);
+    //     $('.edit-todo').on('click', editTodo);
+    // }
+
+    // $('#add').click(saveTodo);
+    // $('#add2').click(() => {
+    //   dm.pubData('chatrooms', 'message', { chatroom_id: 2, message: "YOOOO"}, (err) => {
+    //     if (err) {
+    //       throw err;
+    //     }
+    //     console.log('message successfully sent');
+    //   })
+    // });
+    // $('#room').click(() => {
+    //   dm.pubData('chatrooms', 'createRoom', {room_name: $('#roomInput').val()}, (err) => {
+    //
+    //     console.log('room created');
+    //
+    //   })
+    // })
+
+    // function saveTodo() {
+    //     dm.pubData('todos', 'saveTodo', {
+    //         id: Math.ceil(Math.random() * 1000),
+    //         name: $('#text').val()
+    //     }, function(savedToLocal) {
+    //         console.log('savedToLocal : ', savedToLocal);
+    //     });
+    //     $('#text').val('');
+    // }
+    //
+    // function editTodo() {
+    //     var name = $(this).data('name');
+    //     var id = $(this).data('id');
+    //     var updatedName = prompt('Update ' + name);
+    //
+    //     if (updatedName && updatedName != name) {
+    //         dm.pubData('todos', 'updateTodo', {
+    //             id: id,
+    //             name: updatedName
+    //         }, function(savedToLocal) {
+    //             console.log('savedToLocal : ', savedToLocal);
+    //         });
+    //     }
+    // }
+    //
+    // function removeTodo() {
+    //     dm.pubData('todos', 'deleteTodo', {
+    //         id: $(this).data('id')
+    //     }, function(savedToLocal) {
+    //         console.log('savedToLocal : ', savedToLocal);
+    //     });
+    // }
+    </script>
+
+</body>
+
 </html>

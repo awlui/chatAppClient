@@ -9,7 +9,7 @@
     "prebuild": "npm-run-all --serial cleanDist",
     "cleanDist": "rimraf dist",
     "build": "webpack",
-    "build:prod": "webpack -p",
+    "build:prod": "webpack -p --env=production",
     "pretest": "rm -rf coverage",
     "test": "karma start",
     "test2": "npm run test && npm run ts-coverage-remap",
