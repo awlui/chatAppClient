@@ -44,6 +44,11 @@ const commonConfig = merge([
 ]);
 
 const productionConfig = merge([
+{
+      externals: {
+      'rxjs/Rx': 'rxjs',
+    }
+}
 ]);
 
 const developmentConfig = merge([

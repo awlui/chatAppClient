@@ -20,6 +20,7 @@
     "@types/assert": "^0.0.31",
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
+    "@types/rx": "^4.1.1",
     "assert": "^1.4.1",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.17",
@@ -52,7 +53,6 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
-    "@types/rx": "^4.1.1",
     "@types/socket.io": "^1.4.31",
     "@types/socket.io-client": "^1.4.31",
     "fs": "^0.0.1-security",

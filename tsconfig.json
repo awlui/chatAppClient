@@ -6,6 +6,7 @@
     "strict": true,
     "noEmitHelpers": true,
     "sourceMap": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "skipLibCheck": true
   }
 }

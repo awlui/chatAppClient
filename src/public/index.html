@@ -4,11 +4,16 @@
 
 <head>
     <title>Todo App</title>
+    <style media="screen">
+      input.logout {
+        display: none;
+      }
+    </style>
 </head>
 
 <body>
 
-    <div>
+    <div id="login">
         <!-- <h2>Todos</h2>
         <input type="text" id="text">
         <input id="add" type="button" value="+ Add new">
@@ -16,6 +21,7 @@
         <input id="room" type="button" value="Add Room">
         <input type="text" id="roomInput">
         <ul id="showAll"></ul> -->
+
         <label for="username">Username:</label>
         <input type="text" id="username">
         <label for="password">Password:</label>
@@ -23,43 +29,64 @@
         <input type="submit" name="Submit" id="submit">
 
     </div>
-
+    <div>
+      <input type="submit" name="logout" value="logout" class="logout" id="logout">
+    </div>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="src.js"></script>
     <script>
     var options = {
-        connection: 'localhost:2000',
-        connectCB: connectCB,
-        collections: [
-          {
-            'name': 'todos',
-            'subscribers': {
-                'allTodos': renderAllTodos
-            },
-          }
-      ]
+        connection: 'localhost:2000'
     };
 
     var dm = new DataManager(options);
     $("#submit").click(() => {
-      dm.login($("#username").val(), );
-    })
-    // function connectCB() {
-    //     // console.log('connected');
-    // }
+      console.log('click')
+      dm.login($("#username").val(), $("#password").val());
+    });
 
-    // function renderAllTodos(data) {
-    //     var html = '';
-    //     if (!data) return;
-    //     data.forEach(function(k) {
-    //         html += '<li>' + k.name + ' [<a href="javascript:" data-name="' + k.name + '" data-id="' + k.id + '" class="edit-todo">Edit</a>] [<a href="javascript:" data-id="' + k.id + '" class="remove-todo">Remove</a>]</li>';
-    //     });
-    //     $('#showAll').html(html);
-    //
-    //     // bind event listeners
-    //     $('.remove-todo').on('click', removeTodo);
-    //     $('.edit-todo').on('click', editTodo);
-    // }
+    $("#logout").click(() => {
+      dm.logout();
+    })
+    $('#login').on('keypress', (e) => {
+      if (e.charCode === 13) {
+        $('#submit').click();
+      }
+    })
+    dm.masterObservable.subscribe((e) => {
+      switch(e.name) {
+        case 'authenticated':
+          $('#username').val('').empty();
+          $('#password').val('').empty();
+          $('#login').hide();
+          $('#logout').toggle();
+          break;
+        case 'unauthorized':
+          $('#logout').toggle();
+          $('#login').show();
+          break;
+        case 'logout':
+          $('#logout').toggle();
+          $('#login').show();
+
+      }
+    })
+    function connectCB() {
+        // console.log('connected');
+    }
+
+    function renderAllTodos(data) {
+        var html = '';
+        if (!data) return;
+        data.forEach(function(k) {
+            html += '<li>' + k.name + ' [<a href="javascript:" data-name="' + k.name + '" data-id="' + k.id + '" class="edit-todo">Edit</a>] [<a href="javascript:" data-id="' + k.id + '" class="remove-todo">Remove</a>]</li>';
+        });
+        $('#showAll').html(html);
+
+        // bind event listeners
+        $('.remove-todo').on('click', removeTodo);
+        $('.edit-todo').on('click', editTodo);
+    }
 
     // $('#add').click(saveTodo);
     // $('#add2').click(() => {
