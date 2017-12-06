@@ -16,70 +16,14 @@ export class DataManager {
       return this._masterHotObservable;
     }
 
-    constructor(private options: iOptions) {
-        this.connection = options.connection;
+
+    constructor({connection, socketObsFactoryMap}: iOptions) {
+        this.connection = connection;
         this.isConnectionAlive = false;
-        this.init();
+        this.init(socketObsFactoryMap);
     }
 
-    private auth = () => {
-      function _authenticated(this: any, observer: Observer<wsEvent>, e: any) {
-
-        const token = e.token;
-        this.collSockets['chatrooms'].emit('joinRooms', { token });
-        observer.next({
-          name: 'authenticated',
-          wsmessage: {
-            token
-          }
-        });
-        this._hydrateChatrooms();
-
-      }
-
-      function _unauthorized(this: any, observer: Observer<wsEvent>, e: Event) {
-        observer.next({
-          name: 'unauthorized'
-        })
-      }
-
-      function _handleSignUp(observer: Observer<wsEvent>, data: any) {
-        observer.next({
-          name: 'signup-response',
-          wsmessage: {
-            data
-          }
-        })
-      }
-      function _usernameExist(observer: Observer<wsEvent>, data: any) {
-        observer.next({
-          name: 'usernameExist',
-          wsmessage: {
-            data
-          }
-        })
-      }
-      const cs = this.collSockets;
-      const authSocket = io(`${this.connection}/auth`);
-      cs['auth'] = authSocket;
-      let observable = Observable.create((observer: Observer<wsEvent>) => {
-        authSocket.on('authenticated', _authenticated.bind(this, observer));
-        authSocket.on('unauthorized', _unauthorized.bind(this, observer));
-        authSocket.on('signup-response', _handleSignUp.bind(this, observer));
-        authSocket.on('usernameExist', _usernameExist.bind(this, observer));
-      });
-
-      return observable;
-    }
-    private roomInit = () => {
-      this.collSockets['chatrooms'] = io(`${this.connection}/chatrooms`);
-      let observable = Observable.create((observer: Observer<wsEvent>) => {
-        // this.collSockets['chatrooms'].on('message', this._message.bind(this, observer));
-      });
-      return observable;
-
-    }
-    private init = (): void => {
+    private init = (socketObsFactoryMap: isocketObsFactoryMap): void => {
     const _message = (observer: Observer<wsEvent>, data: any) => {
       observer.next({
         name: 'message',
@@ -135,32 +79,20 @@ export class DataManager {
       });
 
       observable.subscribe(this._masterHotObservable);
-      this.roomInit().subscribe(this._masterHotObservable);
-      this.auth().subscribe(this._masterHotObservable);
 
+      this.socketToObservable(socketObsFactoryMap);
     }
 
-    private socketToObservable = (socketObsFactoryMap: isocketObsFactoryMap) => {
+ private socketToObservable = (socketObsFactoryMap: isocketObsFactoryMap) => {
       Object.keys(socketObsFactoryMap).forEach((obsFactory: string) => {
         if (!this.collSockets[obsFactory]) {
           this.collSockets[obsFactory] = io(`${this.connection}/${obsFactory}`);
         }
-
+        console.log(this.collSockets, 'here are the sockets');
+        socketObsFactoryMap[obsFactory](this.collSockets[obsFactory]).subscribe(this._masterHotObservable);
       });
     }
 
-    // private _hydrateChatrooms = () => {
-    //   this.publish('chatrooms', 'hydrateChatrooms');
-    //   let observable = Observable.create((observer: Observer<wsEvent>) => {
-    //     this.collSockets['chatrooms'].once('hydrateChatrooms', (payload: any) => {
-    //       observer.next({
-    //         name: 'chatroom-hydration',
-    //         wsmessage: payload
-    //       });
-    //     })
-    //   });
-    //   observable.subscribe(this._masterHotObservable);
-    // }
     public login = (username: string, password: string) => {
       this.collSockets['auth'].emit('authentication', {username, password});
     }

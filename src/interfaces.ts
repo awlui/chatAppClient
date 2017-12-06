@@ -2,6 +2,7 @@ export interface iOptions {
     connection: string,
     connectCB?: Function,
     collections: Array<SocketIOClient.Socket>
+    socketObsFactoryMap: isocketObsFactoryMap
 }
 
 export interface iCollectionItem {
@@ -27,4 +28,8 @@ export interface Observer<T> {
   next: (value: T) => void;
   error: (err: any) => void;
   complete: () => void;
+}
+
+export interface isocketObsFactoryMap {
+  [key: string]: Function;
 }

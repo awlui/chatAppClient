@@ -14,7 +14,7 @@ const PATHS = {
 const commonConfig = merge([
   {
     entry: {
-      src: './index',
+      src: './index3',
     },
     // externals: {
     //   "socket.io-client": "socket.io-client"
